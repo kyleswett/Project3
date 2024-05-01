@@ -62,75 +62,78 @@ const App = () => {
   };
 
   return (
-    <View style={{ flex: 1, padding: 20 }}>
-      <Text style={{ fontSize: 20, marginBottom: 10 }}>Poker Pot Tracker</Text>
-      <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+    <View className="flex-1 bg-black p-4 justify-center pt-12">
+      <Text className="font-bold text-center mb-6 bg-green-700 pt-4 pb-4 text-3xl">Poker Pot Tracker</Text>
+      <View className="flex-row mb-4">
         <TextInput
-          style={{ flex: 1, marginRight: 10, borderWidth: 1, padding: 5 }}
+          className="flex-1 mr-2 bg-white border border-gray-300 rounded p-2"
           placeholder="Player Name"
           value={name}
           onChangeText={setName}
         />
         <TextInput
-          style={{ flex: 1, borderWidth: 1, padding: 5 }}
+          className="flex-1 bg-white border border-gray-300 rounded p-2"
           placeholder="Buy In"
           keyboardType="numeric"
           value={buyIn}
           onChangeText={setBuyIn}
         />
+        </View>
+        <TouchableOpacity
+          className="bg-blue-500 p-3 rounded mb-4 items-center"
+          onPress={addPlayer}
+        >
+        <Text className="text-white font-semibold">Add Player</Text>
+        </TouchableOpacity>
+        <FlatList
+          data={players}
+          renderItem={({ item, index }) => (
+        <View className="p-3 bg-white mb-2 rounded shadow">
+        <Text className="font-semibold">{item.name} - In for: ${item.buyIn.toFixed(2)}</Text>
+        <View className="flex-row justify-between mt-2">
+        <View className="flex-1 mr-2">
+        <TextInput
+          className="bg-white border border-gray-300 rounded p-2 mb-2"
+          placeholder="Add-on $"
+          keyboardType="numeric"
+          value={addOnAmounts[item.name]}
+          onChangeText={(text) => handleAddOnChange(item.name, text)}
+        />
+        <TouchableOpacity
+          className="bg-green-500 p-2 rounded"
+          onPress={() => handleAddOn(item.name, addOnAmounts[item.name])}
+        >
+        <Text className="text-white">Add-on</Text>
+        </TouchableOpacity>
+        </View>
+        <View className="flex-1 ml-2">
+          <TextInput
+            className="bg-white border border-gray-300 rounded p-2 mb-2"
+            placeholder="Cash Out $"
+            keyboardType="numeric"
+            value={cashOutAmounts[item.name]}
+            onChangeText={(text) => handleCashOutAmountChange(item.name, text)}
+          />
+          <TouchableOpacity
+            className="bg-red-500 p-2 rounded"
+            onPress={() => cashOutPlayer(index)}
+          >
+          <Text className="text-white">Cash Out</Text>
+          </TouchableOpacity>
+        </View>
       </View>
       <TouchableOpacity
-        style={{ backgroundColor: 'blue', padding: 10, alignItems: 'center', borderRadius: 5, marginBottom: 10 }}
-        onPress={addPlayer}
+        className="bg-orange-500 p-2 rounded mt-2"
+        onPress={() => removePlayer(index)}
       >
-        <Text style={{ color: 'white' }}>Add Player</Text>
+        <Text className="text-white">Busted?</Text>
       </TouchableOpacity>
-      <FlatList
-        data={players}
-        renderItem={({ item, index }) => (
-          <View style={{ marginBottom: 5 }}>
-            <Text>{item.name} - In for: ${item.buyIn.toFixed(2)}</Text>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <TextInput
-                style={{ flex: 1, borderWidth: 1, padding: 5, marginRight: 10 }}
-                placeholder="Add-on $"
-                keyboardType="numeric"
-                value={addOnAmounts[item.name]}
-                onChangeText={(text) => handleAddOnChange(item.name, text)}
-              />
-              <TouchableOpacity
-                style={{ backgroundColor: 'green', padding: 5, borderRadius: 5 }}
-                onPress={() => handleAddOn(item.name, addOnAmounts[item.name])}
-              >
-                <Text style={{ color: 'white' }}>Add-on</Text>
-              </TouchableOpacity>
-              <TextInput
-                style={{ flex: 1, borderWidth: 1, padding: 5, marginRight: 10 }}
-                placeholder="Cash Out $"
-                keyboardType="numeric"
-                value={cashOutAmounts[item.name]}
-                onChangeText={(text) => handleCashOutAmountChange(item.name, text)}
-              />
-              <TouchableOpacity
-                style={{ backgroundColor: 'red', padding: 5, borderRadius: 5 }}
-                onPress={() => cashOutPlayer(index)}
-              >
-                <Text style={{ color: 'white' }}>Cash Out</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{ backgroundColor: 'orange', padding: 5, borderRadius: 5 }}
-                onPress={() => removePlayer(index)}
-              >
-                <Text style={{ color: 'white' }}>Busted?</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        )}
-        keyExtractor={(item, index) => index.toString()}
-      />
-      <Text style={{ marginTop: 20 }}>Total Pot: ${potTotal.toFixed(2)}</Text>
+    </View>
+  )}
+  keyExtractor={(item, index) => index.toString()}
+  />
+      <Text className="text-center font-bold text-xl bg-green-700 pt-8 pb-8 text-3xl">Total Pot: ${potTotal.toFixed(2)}</Text>
     </View>
   );
 };
-
 export default App;
